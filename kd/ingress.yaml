@@ -1,0 +1,22 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    ingress.kubernetes.io/secure-backends: "true"
+    ingress.kubernetes.io/whitelist-source-range: "{{.WHITELIST}}"
+  name: pttg-ip-calc
+spec:
+  rules:
+  - host: calc.ip.{{.DNS_PREFIX}}pttg.homeoffice.gov.uk
+    http:
+      paths:
+      - backend:
+          serviceName: pttg-ip-calc
+          servicePort: 443
+        path: /
+  tls:
+  - hosts:
+    - calc.ip.{{.DNS_PREFIX}}pttg.homeoffice.gov.uk
+    secretName: letsencrypt-tls-pttg-sprint-ip-calc
